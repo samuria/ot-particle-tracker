@@ -2,27 +2,57 @@
 {% block body %}
 {{ super() }}
 
+<script>
+    function change_file(file_name, extension) {
+        $.ajax({
+            url: Flask.url_for('select_file', {file_name: file_name + "." + extension}),
+            type: "POST",
+            context: this,
+            success: function (response) {
+                console.log(response)
+            },
+            error: function (xhr) {
+                console.log(xhr)
+            }
+        })
+    }
+</script>
+
 <div class="py-5 text-center">
     <h2>Particle Tracker</h2>
     <hr/>
 </div>
-
-<div class="row">
-    <div class="col-md-4 mb-4">
+<div class="row mb-3">
+    <div class="col">
         <div class="card">
             <h4 class="card-header d-flex justify-content-between align-items-center">
                 <span>Media</span>
                 <span class="badge badge-secondary">{{file_list|length}}</span>
             </h4>
-            <div class="list-group list-group-flush" id="fileList" role="filelist">
-                {% for file in file_list %}
-                <a class="list-group-item list-group-item-action" index="{{file.id}}" extension="{{file.extension}}"
-                   data-toggle="list" role="file"
-                   href="#"
-                   aria-controls="profile">{{file.name}}</a>
-                {% endfor %}
-            </div>
 
+            <div class="row">
+                <div class="col">
+                    <div class="list-group list-group-flush" id="fileList" role="filelist">
+                        {% for file in file_list %}
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between"
+                           index="{{file.id}}"
+                           extension="{{file.extension}}"
+                           fileName="{{file.name}}"
+                           data-toggle="list" role="file"
+                           href="#"
+                           onclick="change_file('{{ file.name }}','{{file.extension}}')"
+                           aria-controls="profile"><span><strong>{{file.name}}</strong></span>
+
+                            <div>
+                                <span>{{file.extension}} | </span>
+                                <span>{{file.size}} MB</span>
+                            </div>
+
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
 
             <div class="card-footer">
                 <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addFileModal">
@@ -44,110 +74,173 @@
                 </button>
             </div>
         </div>
-    </div>
+        <!--    Add file modal-->
+        <div class="modal fade" id="addFileModal" tabindex="-1" aria-labelledby="addFileModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addFileModalLabel">Upload file</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/" method="POST" enctype="multipart/form-data" id="uploadFileForm">
 
-    <!--    Add file modal-->
-    <div class="modal fade" id="addFileModal" tabindex="-1" aria-labelledby="addFileModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addFileModalLabel">Upload file</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/" method="POST" enctype="multipart/form-data" id="uploadFileForm">
-
-                        <div class="form-group">
                             <div class="form-group">
-                                <label for="fileName">File name <span
-                                        class="text-muted"><small>- required</small></span></label>
-                                <input type="text" class="form-control" name="fileName" id="fileName"
-                                       aria-describedby="fileNameHelp" required>
+                                <div class="form-group">
+                                    <label for="fileName">File name <span
+                                            class="text-muted"><small>- required</small></span></label>
+                                    <input type="text" class="form-control" name="fileName" id="fileName"
+                                           aria-describedby="fileNameHelp" required>
+                                </div>
+
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="file" id="file" required>
+                                    <label for="file" class="custom-file-label">Choose file</label>
+                                </div>
                             </div>
 
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="file" id="file" required>
-                                <label for="file" class="custom-file-label">Choose file</label>
-                            </div>
-                        </div>
-
-                    </form>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="addFileBtn" type="submit" form="uploadFileForm" class="btn btn-primary">Upload file
+                        </button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button id="addFileBtn" type="submit" form="uploadFileForm" class="btn btn-primary">Upload file
-                    </button>
+            </div>
+        </div>
+
+        <!--    Delete modal-->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete media</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center">
+                            Are you sure you want to delete the selected media? <br/>This action cannot be
+                            undone.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <a id="deleteConfirmBtn" class="btn btn-danger">Delete</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!--    Delete modal-->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete media</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p class="text-center">
-                        Are you sure you want to delete the selected media? <br/>This action cannot be
-                        undone.
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <a id="deleteConfirmBtn" class="btn btn-danger">Delete</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-8">
+<div class="row mb-3">
+    <div class="col">
         <div class="card">
             <h4 class="card-header">
                 Preview
             </h4>
+
             <div class="card-body">
+                <div class="alert alert-info text-center" role="alert" id="selectFileAlert">
+                    Select a file above to preview results.
+                </div>
+                <div class="row d-none" id="previewWrapper">
+                    <div class="col-md-6" style="border-right: 1px solid gray">
+                        <div class="mb-2 bg-dark p-2" id="frameTracking">
+                            <div class="btn-group">
+                                <button class="btn btn-secondary btn-sm" rel="tooltip" data-placement="top" disabled
+                                        data-original-title="Current frame rate.">FPS:
+                                </button>
+                                <button id="fps" class="btn btn-sm btn-success"
+                                        rel="tooltip" data-placement="top" data-original-title="Current frame rate."
+                                        disabled>24
+                                </button>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary btn-sm" rel="tooltip" data-placement="top" disabled
+                                        data-original-title="Current frame rate.">SMPTE:
+                                </button>
+                                <button id="time_code" class="btn btn-sm btn-success"
+                                        rel="tooltip" data-placement="top" data-original-title="Current frame rate."
+                                        style="text-align: left; width: 120px"
+                                        disabled>00:00:00:00
+                                </button>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary btn-sm" rel="" data-placement="top" disabled
+                                        data-original-title="Current frame rate.">Frame:
+                                </button>
+                                <button id="frame_count" class="btn btn-sm btn-success"
+                                        rel="tooltip" data-placement="top" data-original-title="Current frame rate."
+                                        style="text-align: left; width: 120px"
+                                        disabled>00
+                                </button>
+                            </div>
+                        </div>
+                        <video width="100%" id="video_player" controls>
+                        </video>
+                        <div class="d-flex justify-content-center mt-1">
+                            <button type="button" class="btn btn-secondary mr-2" onclick="seekBackward(-1, 29.97)">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left-fill"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.86 8.753l5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="seekForward(1, 29.97)">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-right-fill"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
 
+                    <div class="col-md-6 text-center">
+                        <div class="spinner-border" role="status" id="spinner">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <img width="100%" src="" id="myImage">
+                        <div class="d-flex justify-content-center">
+                            <button id="retrieve" type="button" class="btn btn-secondary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="card">
+            <h4 class="card-header">
+                Properties
+            </h4>
+
+            <div class="card-body">
                 <div class="row">
-                    <div class="col">
-                        <b>Frame:</b> <span id="frame_count">0</span>
-                    </div>
-                    <div class="col">
-                        <b>Time code:</b> <span id="time_code">0</span>
-                    </div>
-                    <div class="col">
-                        <b>FPS</b> <span id="fps">0</span>
+                    <div class="col-md-4">
+                        <form>
+                            <div class="form-group">
+                                <label for="formControlRange">Micron per pixel</label>
+                                <input type="range" class="form-control-range" id="formControlRange">
+                            </div>
+                            <div class="form-group">
+                                <label for="formControlRange">Feature diameter</label>
+                                <input type="range" class="form-control-range" id="formControlRange">
+                            </div>
+                        </form>
                     </div>
                 </div>
 
 
-                <video width="100%" id="video_player" controls>
-                </video>
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-primary mr-3" onclick="seekBackward(-1, 29.97)">
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left-fill"
-                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.86 8.753l5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                        </svg>
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="seekForward(1, 29.97)">
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-right-fill"
-                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                        </svg>
-                    </button>
-                </div>
-                <img width="100%" src="" id="myImage">
-                <button id="retrieve" type="button" class="btn btn-primary">Update</button>
             </div>
         </div>
     </div>
@@ -155,26 +248,8 @@
 
 <script src="{{ url_for('static', filename='js/video_player_functions.js') }}"></script>
 
-
 <script>
-    let selectedFile;
-
-    $('#fileList a').on('click', function (e) {
-        if (selectedFile !== this.getAttribute("index")) {
-            e.preventDefault()
-            $("#video_player").html('<source src="../static/uploads/' + this.innerHTML + '.' + this.getAttribute("extension") + '"' + 'type="video/mp4"></source>');
-            $("#video_player")[0].load()
-
-            selectedFile = this.getAttribute("index")
-        }
-
-        update_track_frame()
-
-        enableDeleteButton();
-    })
-
     $('#deleteBtn').on('click', function (e) {
-        console.log("delete clicked")
         $('#deleteConfirmBtn').attr("href", "/delete_file/" + selectedFile)
     })
 

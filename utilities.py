@@ -20,7 +20,7 @@ def get_all_uploaded_files():
                 'id': index,
                 'name': os.path.splitext(file)[0],
                 'extension': os.path.splitext(file)[1][1:].upper(),
-                'size': os.stat(os.path.join(UPLOAD_DIR, file)).st_size
+                'size': str(round(os.stat(os.path.join(UPLOAD_DIR, file)).st_size / 1000 / 1000, 2))
             }
         )
 

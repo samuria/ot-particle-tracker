@@ -29,6 +29,12 @@ def index():
     return render_template("index.html", file_list=utilities.get_all_uploaded_files())
 
 
+@app.route("/select_file/<file_name>", methods=['POST'])
+def select_file(file_name):
+    va.set_video(file_name)
+    return "true"
+
+
 @app.route("/<int:frame_id>/simple.png", methods=['GET'])
 def get_frame(frame_id):
     frame = va.create_figure(frame_id)

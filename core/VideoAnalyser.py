@@ -2,6 +2,8 @@ from __future__ import division, unicode_literals, print_function
 
 import base64
 from io import BytesIO
+import os
+import utilities
 
 import matplotlib as mpl
 import numpy as np
@@ -16,13 +18,17 @@ import matplotlib.pyplot as plt
 
 class VideoAnalyser:
     def __init__(self):
-        micron_per_pixel = 0.15192872980868
-        feature_diameter = 2.8  # um
-        self.radius = int(np.round(feature_diameter / 2.0 / micron_per_pixel))
+        self.micron_per_pixel = 0.15192872980868
+        self.feature_diameter = 2.8  # um
+        self.radius = int(np.round(self.feature_diameter / 2.0 / self.micron_per_pixel))
         if self.radius % 2 == 0:
             self.radius + 1
 
         self.frames = pims.as_gray(pims.Video('core/sample.mp4'))
+
+    def set_tracking_properties(self, mpp, fd,):
+        self.micron_per_pixel = mpp
+        self.feature_diameter = fd
 
     def create_figure(self, frame_id):
         fig, ax = plt.subplots()
@@ -35,3 +41,7 @@ class VideoAnalyser:
         canvas.print_png(output)
 
         return base64.b64encode(output.getvalue()).decode('utf8')
+
+    def set_video(self, video):
+        print(os.path.join(utilities.UPLOAD_DIR, video))
+        self.frames = pims.as_gray(pims.Video(os.path.join(utilities.UPLOAD_DIR, video)))
