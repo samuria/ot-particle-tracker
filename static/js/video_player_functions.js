@@ -165,7 +165,7 @@ $('#downloadBtn').click(function () {
             a.style.display = 'none';
             a.href = url;
             // the filename you want
-            a.download = 'todo-1.csv';
+            a.download = 'tracking-data.csv';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
