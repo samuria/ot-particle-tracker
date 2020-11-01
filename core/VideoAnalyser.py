@@ -1,20 +1,19 @@
 from __future__ import division, unicode_literals, print_function
 
 import base64
-from io import BytesIO
 import os
-import utilities
+import timeit
+from io import BytesIO
 
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 import numpy as np
 import pims
 import trackpy as tp
-import timeit
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import utilities
 
 mpl.use('Agg')
-
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import matplotlib.pyplot as plt
 
 
 class VideoAnalyser:
@@ -52,8 +51,13 @@ class VideoAnalyser:
         output = BytesIO()
         canvas.print_png(output)
 
-        return [base64.b64encode(output.getvalue()).decode('utf8'), elapsed]
+        return {"image": base64.b64encode(output.getvalue()).decode('utf8'), "time_elapsed": elapsed,
+                "feature_count": len(f_locate.index)}
 
     def set_video(self, video):
         print(os.path.join(utilities.UPLOAD_DIR, video))
         self.frames = pims.as_gray(pims.Video(os.path.join(utilities.UPLOAD_DIR, video)))
+
+    def export_csv(self):
+        data = tp.batch(self.frames, self.radius + 2, minmass=600, invert=True)
+        return data.to_csv()

@@ -18,6 +18,7 @@ $('#fileList a').on('click', function (e) {
 
         $('#defaultPropertiesBtn').removeAttr('disabled')
         $('#saveProperties').removeAttr('disabled')
+        $('#exportBtn').removeAttr('disabled')
 
         selectedFile = this.getAttribute("index")
     }
@@ -53,8 +54,6 @@ $(document).ready(function () {
         $("#spinner").addClass('d-none')
         update_track_frame()
     })
-
-    console.log(defaultProperties)
 })
 
 function update_track_frame() {
@@ -63,10 +62,13 @@ function update_track_frame() {
         type: "GET",
         context: this,
         success: function (response) {
+            console.log(response)
+
             const format = (str2Format, ...args) => str2Format.replace(/(\{\d+\})/g, a => args[+(a.substr(1, a.length - 2)) || 0]);
             $("#myImage").attr('src', format("data:image/png;base64,{0}", response.image))
             $("#spinner").addClass('d-none')
-            $('#timeTaken').text(response.time_taken.toFixed(3))
+            $('#timeTaken').text(response.time_elapsed.toFixed(3))
+            $('#featuresFound').text(response.feature_count)
         },
         error: function (xhr) {
             console.log(xhr)
@@ -149,3 +151,24 @@ $('#saveProperties').click(function () {
         }
     })
 })
+
+$('#downloadBtn').click(function () {
+    $('#exportSpinner').removeClass('d-none')
+    fetch('/get_csv')
+        .then(resp => resp.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            // the filename you want
+            a.download = 'todo-1.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            $('#exportSpinner').addClass('d-none')
+        })
+        .catch(() => alert('oh no!'));
+
+})
+

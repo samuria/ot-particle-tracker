@@ -1,7 +1,8 @@
 import json
 import os
+import time
 
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, Response
 from flask_jsglue import JSGlue
 
 import utilities
@@ -40,10 +41,7 @@ def select_file(file_name):
 @app.route("/<int:frame_id>/simple.png", methods=['GET'])
 def get_frame(frame_id):
     figure = va.create_figure(frame_id)
-    frame = figure[0]
-    time_taken = figure[1]
-
-    return {"image": frame, "time_taken": time_taken}
+    return figure
 
 
 @app.route("/delete_file/<file_id>")
@@ -61,5 +59,15 @@ def save_properties():
     return va.get_tracking_properties()
 
 
+@app.route('/get_csv', methods=['GET'])
+def get_csv():
+    return Response(
+        va.export_csv(),
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                     "attachment; filename=myplot.csv"})
+
+
+
 if __name__ == "__main__":
-    app.run(debug=True, host="localhost")
+    app.run(debug=True, use_reloader=False, host="localhost")
