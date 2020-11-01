@@ -26,13 +26,13 @@ $('#fileList a').on('click', function (e) {
     enableDeleteButton()
 })
 
-var mppRangeVal = $('#mppRange').val()
-var fdRangeVal = $('#fdRange').val()
+let mppRangeVal = $('#mppRange').val();
+let fdRangeVal = $('#fdRange').val();
 
 $(document).ready(function () {
-    var currentFrame = $('#frame_count');
-    var timeCode = $('#time_code');
-    var fps = $('#fps')
+    const currentFrame = $('#frame_count');
+    const timeCode = $('#time_code');
+    const fps = $('#fps');
 
     $('#mppDisplay').text(mppRangeVal)
     $('#fdDisplay').text(fdRangeVal)
@@ -53,6 +53,8 @@ $(document).ready(function () {
         $("#spinner").addClass('d-none')
         update_track_frame()
     })
+
+    console.log(defaultProperties)
 })
 
 function update_track_frame() {
@@ -62,8 +64,9 @@ function update_track_frame() {
         context: this,
         success: function (response) {
             const format = (str2Format, ...args) => str2Format.replace(/(\{\d+\})/g, a => args[+(a.substr(1, a.length - 2)) || 0]);
-            $("#myImage").attr('src', format("data:image/png;base64,{0}", response))
+            $("#myImage").attr('src', format("data:image/png;base64,{0}", response.image))
             $("#spinner").addClass('d-none')
+            $('#timeTaken').text(response.time_taken.toFixed(3))
         },
         error: function (xhr) {
             console.log(xhr)
@@ -103,11 +106,26 @@ $('#mppRange').on('input', function () {
     mppRangeVal = $('#mppRange').val()
     $('#mppDisplay').text(mppRangeVal)
     setRadiusDisplay()
+    $('#propertiesSavedStatus').text('Unsaved')
 })
 
 $('#fdRange').on('input', function () {
     fdRangeVal = $('#fdRange').val()
     $('#fdDisplay').text(fdRangeVal)
+    setRadiusDisplay()
+    $('#propertiesSavedStatus').text('Unsaved')
+})
+
+$('#defaultPropertiesBtn').click(function () {
+    fdRangeVal = defaultProperties.fd
+    mppRangeVal = defaultProperties.mpp
+
+    $('#mppRange').val(mppRangeVal)
+    $('#fdRange').val(fdRangeVal)
+
+    $('#mppDisplay').text(mppRangeVal)
+    $('#fdDisplay').text(fdRangeVal)
+
     setRadiusDisplay()
 })
 

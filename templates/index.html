@@ -3,6 +3,12 @@
 {{ super() }}
 
 <script>
+    defaultProperties = {
+        "mpp": '{{ properties.mpp }}',
+        "fd": '{{ properties.fd }}',
+        "radius": '{{ properties.radius }}'
+    }
+
     function change_file(file_name, extension) {
         $.ajax({
             url: Flask.url_for('select_file', {file_name: file_name + "." + extension}),
@@ -57,23 +63,13 @@
             </div>
 
 
-            <div class="card-footer">
-                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addFileModal">
-                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle-fill" fill="currentColor"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-                    </svg>
-                    Add
-                </button>
+            <div class="card-footer d-flex justify-content-between">
                 <button id="deleteBtn" type="button" class="btn btn-outline-danger" data-toggle="modal"
                         data-target="#deleteModal" disabled>
-                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
-                    </svg>
                     Delete
+                </button>
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addFileModal">
+                    Add
                 </button>
             </div>
         </div>
@@ -148,7 +144,7 @@
         <div class="card">
             <h4 class="card-header d-flex justify-content-between align-items-center">
                 <span>Properties</span>
-                <p class="h6 text-muted" id="propertiesSavedStatus">Unsaved</p>
+                <p class="h6 text-muted" id="propertiesSavedStatus">Saved</p>
             </h4>
 
             <div class="card-body">
@@ -180,9 +176,10 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer">
-                <button type="button" class="btn btn-secondary" id="defaultPropertiesBtn" disabled>Default</button>
-                <button type="button" class="btn btn-primary" id="saveProperties" disabled>Save</button>
+            <div class="card-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" id="defaultPropertiesBtn" disabled>Default
+                </button>
+                <button type="button" class="btn btn-outline-primary" id="saveProperties" disabled>Save</button>
             </div>
         </div>
     </div>
@@ -251,14 +248,37 @@
                     </div>
 
                     <div class="col-md-6 text-center">
-                        <div class="spinner-border" role="status" id="spinner">
+                        <div class="mb-2 bg-dark p-2 rounded" id="trackingDetails">
+                            <div class="btn-group">
+                                <button class="btn btn-secondary btn-sm" rel="tooltip" data-placement="top" disabled
+                                        data-original-title="Current frame rate.">Features found:
+                                </button>
+                                <button id="featuresFound" class="btn btn-sm btn-success"
+                                        rel="tooltip" data-placement="top" data-original-title="Current frame rate."
+                                        disabled>0
+                                </button>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary btn-sm" rel="tooltip" data-placement="top" disabled
+                                        data-original-title="Current frame rate.">Time taken:
+                                </button>
+                                <button id="timeTaken" class="btn btn-sm btn-success"
+                                        rel="tooltip" data-placement="top" data-original-title="Current frame rate."
+                                        disabled>0.000
+                                </button>
+                            </div>
+                        </div>
+                        <div class="spinner-border pt-5" role="status" id="spinner">
                             <span class="sr-only">Loading...</span>
                         </div>
                         <img width="100%" src="" id="myImage">
-                        <div class="d-flex justify-content-center">
-                            <button id="retrieve" type="button" class="btn btn-secondary">Update</button>
-                        </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="d-flex justify-content-end">
+                    <button id="retrieve" type="button" class="btn btn-secondary">Update</button>
                 </div>
             </div>
         </div>
@@ -268,6 +288,7 @@
 <script src="{{ url_for('static', filename='js/video_player_functions.js') }}"></script>
 
 <script>
+
     $('#deleteBtn').on('click', function (e) {
         $('#deleteConfirmBtn').attr("href", "/delete_file/" + selectedFile)
     })

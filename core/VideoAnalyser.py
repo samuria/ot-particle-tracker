@@ -9,6 +9,7 @@ import matplotlib as mpl
 import numpy as np
 import pims
 import trackpy as tp
+import timeit
 
 mpl.use('Agg')
 
@@ -40,15 +41,18 @@ class VideoAnalyser:
 
     def create_figure(self, frame_id):
         fig, ax = plt.subplots()
-        # for frame in np.arange(0, len(frames), 50):  # show every 50th frame to keep file size low
+
+        start_time = timeit.default_timer()
         f_locate = tp.locate(self.frames[frame_id], self.radius + 2, minmass=600, invert=True)
+        elapsed = timeit.default_timer() - start_time
+
         tp.annotate(f_locate, self.frames[frame_id], plot_style={'markersize': self.radius}, ax=ax)
 
         canvas = FigureCanvas(fig)
         output = BytesIO()
         canvas.print_png(output)
 
-        return base64.b64encode(output.getvalue()).decode('utf8')
+        return [base64.b64encode(output.getvalue()).decode('utf8'), elapsed]
 
     def set_video(self, video):
         print(os.path.join(utilities.UPLOAD_DIR, video))

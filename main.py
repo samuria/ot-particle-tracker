@@ -39,8 +39,11 @@ def select_file(file_name):
 
 @app.route("/<int:frame_id>/simple.png", methods=['GET'])
 def get_frame(frame_id):
-    frame = va.create_figure(frame_id)
-    return frame
+    figure = va.create_figure(frame_id)
+    frame = figure[0]
+    time_taken = figure[1]
+
+    return {"image": frame, "time_taken": time_taken}
 
 
 @app.route("/delete_file/<file_id>")
