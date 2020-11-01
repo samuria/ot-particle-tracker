@@ -309,13 +309,13 @@
                                 <div>
                                     <label><strong>Format</strong></label><br>
                                     <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="videoRadioBtn" name="customRadioInline1"
-                                               class="custom-control-input">
+                                        <input type="radio" id="customRadioInline1" name="customRadioInline1"
+                                               class="custom-control-input" value="video" disabled>
                                         <label class="custom-control-label" for="customRadioInline1">Video</label>
                                     </div>
                                     <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="csvRadioBtn" name="customRadioInline1"
-                                               class="custom-control-input">
+                                        <input type="radio" id="customRadioInline2" name="customRadioInline1"
+                                               class="custom-control-input" value="csv">
                                         <label class="custom-control-label" for="customRadioInline2">CSV
                                         </label>
                                     </div>
@@ -339,7 +339,7 @@
                                     </p>
 
                                     <p>
-                                        <strong>Note:</strong> the export process will take a few minutes to complete.
+                                        <strong>Note: The exporting process will take a few minutes to complete.</strong>
                                     </p>
                                 </div>
 
@@ -352,8 +352,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="downloadBtn">Download</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeExportBtn">Close</button>
+                                <button type="button" class="btn btn-primary" id="downloadBtn" disabled>Download</button>
                             </div>
                         </div>
                     </div>

@@ -154,6 +154,9 @@ $('#saveProperties').click(function () {
 
 $('#downloadBtn').click(function () {
     $('#exportSpinner').removeClass('d-none')
+    $('#downloadBtn').prop('disabled', true)
+    $('#closeExportBtn').prop('disabled', true)
+
     fetch('/get_csv')
         .then(resp => resp.blob())
         .then(blob => {
@@ -167,8 +170,14 @@ $('#downloadBtn').click(function () {
             a.click();
             window.URL.revokeObjectURL(url);
             $('#exportSpinner').addClass('d-none')
+            $('#closeExportBtn').prop('disabled', false)
+            $('#downloadBtn').prop('disabled', false)
+
         })
         .catch(() => alert('oh no!'));
+})
 
+$('#customRadioInline2').on('click', function () {
+    $('#downloadBtn').removeAttr('disabled')
 })
 
