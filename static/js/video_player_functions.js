@@ -13,6 +13,12 @@ $('#fileList a').on('click', function (e) {
         $("#spinner").removeClass('d-none')
         $("#selectFileAlert").addClass('d-none')
 
+        $("#propertiesFileAlert").addClass('d-none')
+        $('#propertiesWrapper').removeClass('d-none')
+
+        $('#defaultPropertiesBtn').removeAttr('disabled')
+        $('#saveProperties').removeAttr('disabled')
+
         selectedFile = this.getAttribute("index")
     }
 
@@ -20,10 +26,16 @@ $('#fileList a').on('click', function (e) {
     enableDeleteButton()
 })
 
+var mppRangeVal = $('#mppRange').val()
+var fdRangeVal = $('#fdRange').val()
+
 $(document).ready(function () {
     var currentFrame = $('#frame_count');
     var timeCode = $('#time_code');
     var fps = $('#fps')
+
+    $('#mppDisplay').text(mppRangeVal)
+    $('#fdDisplay').text(fdRangeVal)
 
     video = VideoFrame({
         id: 'video_player',
@@ -59,8 +71,6 @@ function update_track_frame() {
     })
 }
 
-var clickCounter = 0;
-
 function seekForward(nr_of_frames, fps) {
     if (video.paused == false) {
         video.pause();
@@ -81,6 +91,43 @@ function seekBackward(nr_of_frames, fps) {
     });
 }
 
-function get_current_frame() {
-    return Math.round(video.currentTime * FPS);
+function getRadius() {
+    return fdRangeVal / 2.0 / mppRangeVal
 }
+
+function setRadiusDisplay() {
+    $('#radiusDisplay').text(Math.round((getRadius() + Number.EPSILON) * 100) / 100)
+}
+
+$('#mppRange').on('input', function () {
+    mppRangeVal = $('#mppRange').val()
+    $('#mppDisplay').text(mppRangeVal)
+    setRadiusDisplay()
+})
+
+$('#fdRange').on('input', function () {
+    fdRangeVal = $('#fdRange').val()
+    $('#fdDisplay').text(fdRangeVal)
+    setRadiusDisplay()
+})
+
+$('#saveProperties').click(function () {
+    let properties = {
+        "mpp": mppRangeVal,
+        "fd": fdRangeVal
+    }
+
+    $.ajax({
+        url: Flask.url_for('save_properties'),
+        type: "POST",
+        data: JSON.stringify(properties),
+        contentType: "application/json",
+        context: this,
+        success: function (response) {
+            $('#propertiesSavedStatus').text('Saved')
+        },
+        error: function (xhr) {
+            console.log(xhr)
+        }
+    })
+})

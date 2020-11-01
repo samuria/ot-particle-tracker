@@ -1,3 +1,4 @@
+import json
 import os
 
 from flask import Flask, render_template, redirect, request
@@ -26,7 +27,8 @@ def index():
 
             return redirect(request.url)
 
-    return render_template("index.html", file_list=utilities.get_all_uploaded_files())
+    return render_template("index.html", file_list=utilities.get_all_uploaded_files(),
+                           properties=va.get_tracking_properties())
 
 
 @app.route("/select_file/<file_name>", methods=['POST'])
@@ -38,7 +40,6 @@ def select_file(file_name):
 @app.route("/<int:frame_id>/simple.png", methods=['GET'])
 def get_frame(frame_id):
     frame = va.create_figure(frame_id)
-    # response.headers['Content-Type'] = 'image/png'
     return frame
 
 
@@ -46,6 +47,15 @@ def get_frame(frame_id):
 def delete_file(file_id):
     utilities.delete_file(file_id)
     return render_template("index.html", file_list=utilities.get_all_uploaded_files())
+
+
+@app.route('/save_properties', methods=['POST'])
+def save_properties():
+    data = json.loads(request.data)
+
+    va.set_tracking_properties(data.get('mpp'), data.get('fd'))
+
+    return va.get_tracking_properties()
 
 
 if __name__ == "__main__":

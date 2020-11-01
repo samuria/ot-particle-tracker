@@ -26,9 +26,17 @@ class VideoAnalyser:
 
         self.frames = pims.as_gray(pims.Video('core/sample.mp4'))
 
-    def set_tracking_properties(self, mpp, fd,):
+    def set_tracking_properties(self, mpp, fd):
         self.micron_per_pixel = mpp
         self.feature_diameter = fd
+        self.radius = int(np.round(float(fd) / 2.0 / float(mpp)))
+
+    def get_tracking_properties(self):
+        return {
+            'mpp': self.micron_per_pixel,
+            'fd': self.feature_diameter,
+            'radius': self.radius
+        }
 
     def create_figure(self, frame_id):
         fig, ax = plt.subplots()

@@ -30,29 +30,32 @@
                 <span class="badge badge-secondary">{{file_list|length}}</span>
             </h4>
 
-            <div class="row">
-                <div class="col">
-                    <div class="list-group list-group-flush" id="fileList" role="filelist">
-                        {% for file in file_list %}
-                        <a class="list-group-item list-group-item-action d-flex justify-content-between"
-                           index="{{file.id}}"
-                           extension="{{file.extension}}"
-                           fileName="{{file.name}}"
-                           data-toggle="list" role="file"
-                           href="#"
-                           onclick="change_file('{{ file.name }}','{{file.extension}}')"
-                           aria-controls="profile"><span><strong>{{file.name}}</strong></span>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="list-group list-group-flush" id="fileList" role="filelist">
+                            {% for file in file_list %}
+                            <a class="list-group-item list-group-item-action d-flex justify-content-between"
+                               index="{{file.id}}"
+                               extension="{{file.extension}}"
+                               fileName="{{file.name}}"
+                               data-toggle="list" role="file"
+                               href="#"
+                               onclick="change_file('{{ file.name }}','{{file.extension}}')"
+                               aria-controls="profile"><span><strong>{{file.name}}</strong></span>
 
-                            <div>
-                                <span>{{file.extension}} | </span>
-                                <span>{{file.size}} MB</span>
-                            </div>
+                                <div>
+                                    <span>{{file.extension}} | </span>
+                                    <span>{{file.size}} MB</span>
+                                </div>
 
-                        </a>
-                        {% endfor %}
+                            </a>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
+
 
             <div class="card-footer">
                 <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addFileModal">
@@ -143,6 +146,51 @@
 <div class="row mb-3">
     <div class="col">
         <div class="card">
+            <h4 class="card-header d-flex justify-content-between align-items-center">
+                <span>Properties</span>
+                <p class="h6 text-muted" id="propertiesSavedStatus">Unsaved</p>
+            </h4>
+
+            <div class="card-body">
+                <div class="alert alert-info text-center" role="alert" id="propertiesFileAlert">
+                    Select a file above to preview results.
+                </div>
+
+                <div class="row d-none" id="propertiesWrapper">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="mppRange"><strong>Micron per pixel</strong></label>
+                            <input type="range" class="custom-range" id="mppRange" min="0" max="1" step="0.001"
+                                   value="{{properties.mpp}}">
+                            <p id="mppDisplay" class="text-center h4 mt-1">{{properties.mpp}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="fdRange"><strong>Feature diameter</strong></label>
+                            <input type="range" class="custom-range" id="fdRange" value="{{properties.fd}}" max="10"
+                                   min="0" step="0.2">
+                            <p class="text-center h4 mt-1"><span
+                                    id="fdDisplay">{{properties.fd}}</span><span>&#181;m</span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label><strong>Radius</strong></label>
+                        <p id="radiusDisplay" class="text-center h4 mt-1">{{properties.radius}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-secondary" id="defaultPropertiesBtn" disabled>Default</button>
+                <button type="button" class="btn btn-primary" id="saveProperties" disabled>Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="card">
             <h4 class="card-header">
                 Preview
             </h4>
@@ -153,7 +201,7 @@
                 </div>
                 <div class="row d-none" id="previewWrapper">
                     <div class="col-md-6" style="border-right: 1px solid gray">
-                        <div class="mb-2 bg-dark p-2" id="frameTracking">
+                        <div class="mb-2 bg-dark p-2 rounded" id="frameTracking">
                             <div class="btn-group">
                                 <button class="btn btn-secondary btn-sm" rel="tooltip" data-placement="top" disabled
                                         data-original-title="Current frame rate.">FPS:
@@ -212,35 +260,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mb-3">
-    <div class="col">
-        <div class="card">
-            <h4 class="card-header">
-                Properties
-            </h4>
-
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <form>
-                            <div class="form-group">
-                                <label for="formControlRange">Micron per pixel</label>
-                                <input type="range" class="form-control-range" id="formControlRange">
-                            </div>
-                            <div class="form-group">
-                                <label for="formControlRange">Feature diameter</label>
-                                <input type="range" class="form-control-range" id="formControlRange">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-
             </div>
         </div>
     </div>
