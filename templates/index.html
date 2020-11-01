@@ -116,18 +116,51 @@
                 Preview
             </h4>
             <div class="card-body">
+
+                <div class="row">
+                    <div class="col">
+                        <b>Frame:</b> <span id="frame_count">0</span>
+                    </div>
+                    <div class="col">
+                        <b>Time code:</b> <span id="time_code">0</span>
+                    </div>
+                    <div class="col">
+                        <b>FPS</b> <span id="fps">0</span>
+                    </div>
+                </div>
+
+
                 <video width="100%" id="video_player" controls>
                 </video>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary mr-3" onclick="seekBackward(-1, 29.97)">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left-fill"
+                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.86 8.753l5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="seekForward(1, 29.97)">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-right-fill"
+                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                        </svg>
+                    </button>
+                </div>
+                <img width="100%" src="" id="myImage">
+                <button id="retrieve" type="button" class="btn btn-primary">Update</button>
             </div>
         </div>
     </div>
 </div>
 
+<script src="{{ url_for('static', filename='js/video_player_functions.js') }}"></script>
+
+
 <script>
     let selectedFile;
 
     $('#fileList a').on('click', function (e) {
-        if(selectedFile !== this.getAttribute("index")) {
+        if (selectedFile !== this.getAttribute("index")) {
             e.preventDefault()
             $("#video_player").html('<source src="../static/uploads/' + this.innerHTML + '.' + this.getAttribute("extension") + '"' + 'type="video/mp4"></source>');
             $("#video_player")[0].load()
@@ -135,10 +168,12 @@
             selectedFile = this.getAttribute("index")
         }
 
-        enableDeleteButton();
-       })
+        update_track_frame()
 
-    $('#deleteBtn').on('click', function(e) {
+        enableDeleteButton();
+    })
+
+    $('#deleteBtn').on('click', function (e) {
         console.log("delete clicked")
         $('#deleteConfirmBtn').attr("href", "/delete_file/" + selectedFile)
     })
@@ -146,7 +181,6 @@
     function enableDeleteButton() {
         $("#deleteBtn").prop('disabled', false)
     }
-
 
 </script>
 

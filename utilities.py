@@ -1,4 +1,5 @@
 import os
+
 from main import app
 
 UPLOAD_DIR = app.config["UPLOAD_DIR"]
@@ -24,6 +25,7 @@ def get_all_uploaded_files():
         )
 
     return files
+
 
 def delete_file(id):
     files_in_directory = os.listdir(UPLOAD_DIR)
