@@ -13,7 +13,6 @@ Welcome to Optical Tweezers - Particle Tracker 👋
 
 > A research grade optical tweezer uses a focused laser beam to create an optical trap of small particles. The system incorporates a near IR diode laser with PID control thermoelectric cooler with a quadrant photodiode and video sensors. The project for the (Engineering) team member will involve installation of new components, system calibration, adoption of a microfluidiç cell, capture of trapped particle video, analysis of particle behaviour. The project for the second team member (Programmer) involves video / image analysis, algorithm and software development to estimate particle height (and possibly 3D motion) from video.
 ### 🏠 [Homepage](https://github.com/samuria/ot-particle-tracker)
-### ✨ [Demo](https://github.com/pedroermarinho/markdown-readme-generator#readme)
 ## Install
 ```sh
 pip3 install -r requirements.txt
@@ -32,12 +31,12 @@ python3 main.app
 
 
 * GitHub: [@samuria](https://github.com/{github_username})
-* LinkedIn: [@https://www.linkedin.com/in/umar-ahmedov-17052b129/](https://linkedin.com/in/{author_linkedin_username})
+* LinkedIn: [https://www.linkedin.com/in/umar-ahmedov-17052b129/](https://linkedin.com/in/{author_linkedin_username})
 
 
 
 ## 🤝 Contributing
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/pedroermarinho/markdown-readme-generator/issues). You can also take a look at the [contributing guide](https://github.com/pedroermarinho/markdown-readme-generator/blob/master/CONTRIBUTING.md)
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/samuria/ot-particle-tracker/issues). 
 ## Show your support
 Give a ⭐️ if this project helped you!
 ## Credits
@@ -46,6 +45,3 @@ Give a ⭐️ if this project helped you!
 
 Copyright © 2020 [Umar Ahmed](https://github.com/samuria ).<br/>
 This project is [MIT](https://github.com/pedroermarinho/markdown-readme-generator/blob/master/LICENSE) licensed.
-
----
-_This README was created with the [markdown-readme-generator](https://github.com/pedroermarinho/markdown-readme-generator)_
