@@ -1,6 +1,6 @@
 <h1 align="center">
 
-Welcome to new project 👋
+Welcome to Optical Tweezers - Particle Tracker 👋
 
 </h1>
 <p>
@@ -11,33 +11,28 @@ Welcome to new project 👋
 
 </p>
 
-> new project
-### 🏠 [Homepage](https://github.com/pedroermarinho/markdown-readme-generator#readme)
+> A research grade optical tweezer uses a focused laser beam to create an optical trap of small particles. The system incorporates a near IR diode laser with PID control thermoelectric cooler with a quadrant photodiode and video sensors. The project for the (Engineering) team member will involve installation of new components, system calibration, adoption of a microfluidiç cell, capture of trapped particle video, analysis of particle behaviour. The project for the second team member (Programmer) involves video / image analysis, algorithm and software development to estimate particle height (and possibly 3D motion) from video.
+### 🏠 [Homepage](https://github.com/samuria/ot-particle-tracker)
 ### ✨ [Demo](https://github.com/pedroermarinho/markdown-readme-generator#readme)
 ## Install
 ```sh
-pip3 install markdown-readme-generator
+pip3 install -r requirements.txt
 
 ```
 
 ## Usage
 ```sh
-mrgenerator-cli
+python3 main.app
 
 ```
 
-## Run tests
-```sh
-python3 run.py
-
-```
 
 ## Author
-👤 **your name**
+👤 **Umar Ahmed**
 
 
-
-
+* GitHub: [@samuria](https://github.com/{github_username})
+* LinkedIn: [@https://www.linkedin.com/in/umar-ahmedov-17052b129/](https://linkedin.com/in/{author_linkedin_username})
 
 
 
@@ -46,9 +41,10 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 ## Show your support
 Give a ⭐️ if this project helped you!
 ## Credits
-**[Markdown Readme Generator](https://github.com/pedroermarinho/markdown-readme-generator)**
+**[Trackpy](https://soft-matter.github.io/trackpy/v0.4.2/)**
 ## 📝 License
 
+Copyright © 2020 [Umar Ahmed](https://github.com/samuria ).<br/>
 This project is [MIT](https://github.com/pedroermarinho/markdown-readme-generator/blob/master/LICENSE) licensed.
 
 ---
