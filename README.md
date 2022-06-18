@@ -31,7 +31,7 @@ python3 main.app
 
 
 * GitHub: [@samuria](https://github.com/{github_username})
-* LinkedIn: [https://www.linkedin.com/in/umar-ahmedov-17052b129/](https://linkedin.com/in/{author_linkedin_username})
+* LinkedIn: [https://www.linkedin.com/in/umar-ahmedov-17052b129/](https://www.linkedin.com/in/umar-ahmedov-17052b129/)
 
 
 
